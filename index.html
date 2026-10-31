@@ -42,7 +42,7 @@ function loadHistory(){
 async function sendMessage(){
  const t=input.value.trim();if(!t)return;input.value='';bubble(t,'you');history.push({role:'user',content:t});saveHistory();send.disabled=true;hint.textContent='Dina sedang menyiapkan jawaban…';
  try{const r=await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history.slice(-10)})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Permintaan gagal');const answer=d.reply||'Maaf, Dina belum menerima jawaban.';history.push({role:'assistant',content:answer});saveHistory();bubble(answer,'dina');hint.textContent='Dina menerima pesan melalui AI online.';}
- catch(e){history.pop();saveHistory();bubble('Maaf, Mas. '+e.message,'dina');hint.textContent='Periksa pengaturan fungsi AI di Netlify.';}
+ catch(e){saveHistory();bubble('Maaf, Mas. '+e.message,'dina');hint.textContent='Periksa pengaturan fungsi AI di Netlify.';}
  finally{send.disabled=false;input.focus();}
 }
 clearButton.addEventListener('click',()=>{if(!confirm('Hapus semua riwayat percakapan yang tersimpan di perangkat ini?'))return;history=[];saveHistory();loadHistory();});
