@@ -38,8 +38,9 @@ function loadHistory(){
  chat.replaceChildren();
  if(history.length){history.forEach(m=>bubble(m.content,m.role==='user'?'you':'dina'));hint.textContent='Riwayat percakapan sebelumnya berhasil dimuat.';}
  else{bubble('Halo, selamat datang di Dina AI. Ada yang bisa kami bantu?','dina');}function offlineReply(message){
+}
+function offlineReply(message){
   const m = message.toLowerCase();
-
   
 if(/^(assalamualaikum|assalamu'alaikum)/.test(m)){
   return "Waalaikumsalam, Mas. Ada yang bisa Dina bantu?";
