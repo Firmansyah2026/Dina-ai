@@ -37,7 +37,7 @@ function loadHistory(){
  try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');if(Array.isArray(saved)){history=saved.filter(m=>m&&(m.role==='user'||m.role==='assistant')&&typeof m.content==='string').slice(-100);}}catch(e){history=[];}
  chat.replaceChildren();
  if(history.length){history.forEach(m=>bubble(m.content,m.role==='user'?'you':'dina'));hint.textContent='Riwayat percakapan sebelumnya berhasil dimuat.';}
- else{bubble('Halo, selamat datang di Dina AI. Ada yang bisa kami bantu?','dina');}function offlineReply(message){
+ else{bubble('Halo, selamat datang di Dina AI. Ada yang bisa kami bantu?','dina');}
 }
 function offlineReply(message){
   const m = message.toLowerCase();
