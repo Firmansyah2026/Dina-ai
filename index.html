@@ -39,10 +39,33 @@ function loadHistory(){
  if(history.length){history.forEach(m=>bubble(m.content,m.role==='user'?'you':'dina'));hint.textContent='Riwayat percakapan sebelumnya berhasil dimuat.';}
  else{bubble('Wa’alaikumussalam, Mas. Ada yang ingin Mas ceritakan hari ini? 💗','dina');hint.textContent='Kirim pesan untuk memulai percakapan dengan AI.';}
 }
-async function sendMessage(){
+function offlineReply(message){
+  const m = message.toLowerCase();
+
+  if(/^(hai|halo|hello|assalamualaikum)/.test(m)){
+    return "Waalaikumsalam. Dina sedang dalam mode offline, tetapi tetap bisa memberi balasan sederhana.";
+  }
+
+  if(/terima kasih|makasih/.test(m)){
+    return "Sama-sama. Semoga hari Mas menyenangkan.";
+  }
+
+  if(/bantuan|help|tolong/.test(m)){
+    return "Dina siap membantu dengan balasan sederhana. Untuk jawaban AI lengkap, koneksi layanan AI perlu tersedia.";
+  }
+
+  return "Dina sedang dalam mode offline. Balasan AI lengkap belum tersedia.";
+}
+ async function sendMessage(){
  const t=input.value.trim();if(!t)return;input.value='';bubble(t,'you');history.push({role:'user',content:t});saveHistory();send.disabled=true;hint.textContent='Dina sedang menyiapkan jawaban…';
  try{const r=await fetch('/.netlify/functions/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history.slice(-10)})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Permintaan gagal');const answer=d.reply||'Maaf, Dina belum menerima jawaban.';history.push({role:'assistant',content:answer});saveHistory();bubble(answer,'dina');hint.textContent='Dina menerima pesan melalui AI online.';}
- catch(e){saveHistory();bubble('Maaf, Mas. '+e.message,'dina');hint.textContent='Periksa pengaturan fungsi AI di Netlify.';}
+catch(e){
+  const reply=offlineReply(t);
+  history.push({role:'assistant',content:reply});
+  saveHistory();
+  bubble(reply,'dina');
+  hint.textContent='Mode offline aktif. AI online belum tersedia.';
+ }
  finally{send.disabled=false;input.focus();}
 }
 clearButton.addEventListener('click',()=>{if(!confirm('Hapus semua riwayat percakapan yang tersimpan di perangkat ini?'))return;history=[];saveHistory();loadHistory();});
