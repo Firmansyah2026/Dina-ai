@@ -42,9 +42,15 @@ function loadHistory(){
 function offlineReply(message){
   const m = message.toLowerCase();
 
-  if(/^(hai|halo|hello|assalamualaikum)/.test(m)){
-    return "Waalaikumsalam. Dina sedang dalam mode offline, tetapi tetap bisa memberi balasan sederhana.";
-  }
+  
+if(/^(assalamualaikum|assalamu'alaikum)/.test(m)){
+  return "Waalaikumsalam, Mas. Ada yang bisa Dina bantu?";
+}
+
+if(/^(hai|halo|hello)\b/.test(m)){
+  return "Halo, Mas. Ada yang bisa Dina bantu?";
+}
+
 
   if(/terima kasih|makasih/.test(m)){
     return "Sama-sama. Semoga hari Mas menyenangkan.";
